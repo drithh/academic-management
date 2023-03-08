@@ -1,0 +1,36 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Student {
+  NIM: String!
+  Name: String!
+  Address: String!
+}
+
+type Lecturer {
+  NIP: String!
+  Name: String!
+  Address: String!
+}
+
+type Course {
+  Code: String!
+  Name: String!
+  Credit: Int!
+  Semester: Int!
+  Lecturer: Lecturer!
+}
+
+type StudentCourse {
+  Student: Student!
+  Course: Course!
+  Grade: Int!
+}
+
+type Query {
+  student(NIM: String!): Student
+  lecturer(NIP: String!): Lecturer
+  course(Code: String!): Course
+  studentCourse(Student: String!): [StudentCourse]
+}
