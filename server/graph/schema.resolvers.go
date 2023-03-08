@@ -11,9 +11,34 @@ import (
 	"github.com/drithh/multi-tier-architecture/graph/model"
 )
 
+// CreateStudent is the resolver for the createStudent field.
+func (r *mutationResolver) CreateStudent(ctx context.Context, input model.StudentInput) (*model.Student, error) {
+	panic(fmt.Errorf("not implemented: CreateStudent - createStudent"))
+}
+
+// CreateLecturer is the resolver for the createLecturer field.
+func (r *mutationResolver) CreateLecturer(ctx context.Context, input model.LecturerInput) (*model.Lecturer, error) {
+	panic(fmt.Errorf("not implemented: CreateLecturer - createLecturer"))
+}
+
+// CreateCourse is the resolver for the createCourse field.
+func (r *mutationResolver) CreateCourse(ctx context.Context, input model.CourseInput) (*model.Course, error) {
+	panic(fmt.Errorf("not implemented: CreateCourse - createCourse"))
+}
+
+// CreateStudentCourse is the resolver for the createStudentCourse field.
+func (r *mutationResolver) CreateStudentCourse(ctx context.Context, input model.StudentCourseInput) (*model.StudentCourse, error) {
+	panic(fmt.Errorf("not implemented: CreateStudentCourse - createStudentCourse"))
+}
+
 // Student is the resolver for the student field.
 func (r *queryResolver) Student(ctx context.Context, nim string) (*model.Student, error) {
-	panic(fmt.Errorf("not implemented: Student - student"))
+	return &model.Student{
+		Nim:     "1243",
+		Name:    "John Doe",
+		Address: "Jl. Jalan",
+	}, nil
+
 }
 
 // Lecturer is the resolver for the lecturer field.
@@ -31,7 +56,11 @@ func (r *queryResolver) StudentCourse(ctx context.Context, student string) ([]*m
 	panic(fmt.Errorf("not implemented: StudentCourse - studentCourse"))
 }
 
+// Mutation returns MutationResolver implementation.
+func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
