@@ -16,7 +16,7 @@ import (
 // }
 func New () *pg.DB {
 	db := pg.Connect(&pg.Options{
-		Addr:     "postgres:5432",
+		Addr:     os.Getenv("POSTGRES_HOST") + ":" + os.Getenv("POSTGRES_PORT"),
 		User:     os.Getenv("POSTGRES_USER"),
 		Password: os.Getenv("POSTGRES_PASSWORD"),
 		Database: os.Getenv("POSTGRES_DB"),
