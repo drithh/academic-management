@@ -56,9 +56,13 @@ input EnrollmentInput {
 
 type Query {
   student(NIM: String!): Student
+  students: [Student]
   lecturer(NIP: String!): Lecturer
+  lecturers: [Lecturer]
   course(Code: String!): Course
+  courses: [Course]
   enrollment(Student: String!, Course: String!): Enrollment
+  enrollments: [Enrollment]
 }
 
 type Mutation {

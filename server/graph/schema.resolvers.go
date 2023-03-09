@@ -6,61 +6,133 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/drithh/multi-tier-architecture/graph/model"
 )
 
 // CreateStudent is the resolver for the createStudent field.
-func (r *mutationResolver) CreateStudent(ctx context.Context, input model.StudentInput) (*model.Student, error) {
-	panic(fmt.Errorf("not implemented: CreateStudent - createStudent"))
-}
+	func (r *mutationResolver) CreateStudent(ctx context.Context, input model.StudentInput) ( *model.Student,  error){
+		studentInput := &model.StudentInput{
+		Nim:     input.Nim,
+		Name:    input.Name,
+		Address: input.Address,
+	}
+	err := r.Repository.CreateStudent(studentInput)
+	student := &model.Student{
+		Nim:     studentInput.Nim,
+		Name:    studentInput.Name,
+		Address: studentInput.Address,
+	}
+	return student, err
+	}
 
 // CreateLecturer is the resolver for the createLecturer field.
-func (r *mutationResolver) CreateLecturer(ctx context.Context, input model.LecturerInput) (*model.Lecturer, error) {
-	panic(fmt.Errorf("not implemented: CreateLecturer - createLecturer"))
-}
+	func (r *mutationResolver) CreateLecturer(ctx context.Context, input model.LecturerInput) ( *model.Lecturer,  error){
+		lecturerInput := &model.LecturerInput{
+		Nip:     input.Nip,
+		Name:    input.Name,
+		Address: input.Address,
+	}
+	err := r.Repository.CreateLecturer(lecturerInput)
+	lecturer := &model.Lecturer{
+		Nip:     lecturerInput.Nip,
+		Name:    lecturerInput.Name,
+		Address: lecturerInput.Address,
+	}
+	return lecturer, err
+	}
 
 // CreateCourse is the resolver for the createCourse field.
-func (r *mutationResolver) CreateCourse(ctx context.Context, input model.CourseInput) (*model.Course, error) {
-	panic(fmt.Errorf("not implemented: CreateCourse - createCourse"))
-}
+	func (r *mutationResolver) CreateCourse(ctx context.Context, input model.CourseInput) ( *model.Course,  error){
+		courseInput := &model.CourseInput{
+		Code: input.Code,
+		Name: input.Name,
+	}
+	err := r.Repository.CreateCourse(courseInput)
+	course := &model.Course{
+		Code: courseInput.Code,
+		Name: courseInput.Name,
+	}
+	return course, err
+	}
 
-// CreateStudentCourse is the resolver for the createStudentCourse field.
-func (r *mutationResolver) CreateStudentCourse(ctx context.Context, input model.StudentCourseInput) (*model.StudentCourse, error) {
-	panic(fmt.Errorf("not implemented: CreateStudentCourse - createStudentCourse"))
-}
+// CreateEnrollment is the resolver for the createEnrollment field.
+	func (r *mutationResolver) CreateEnrollment(ctx context.Context, input model.EnrollmentInput) ( *model.Enrollment,  error){
+		enrollmentInput := &model.EnrollmentInput{
+		Student: input.Student,
+		Course:  input.Course,
+		Grade:   input.Grade,
+	}
+	err := r.Repository.CreateEnrollment(enrollmentInput)
+	if err != nil {
+		return nil, err
+	}
+	student, err := r.Repository.GetStudent(enrollmentInput.Student)
+	if err != nil {
+		return nil, err
+	}
+	course, err := r.Repository.GetCourse(enrollmentInput.Course)
+	if err != nil {
+		return nil, err
+	}
+	enrollment := &model.Enrollment{
+		Student: student,
+		Course:  course,
+		Grade:   enrollmentInput.Grade,
+	}
+	return enrollment, err
+	}
 
 // Student is the resolver for the student field.
-func (r *queryResolver) Student(ctx context.Context, nim string) (*model.Student, error) {
-	return &model.Student{
-		Nim:     "1243",
-		Name:    "John Doe",
-		Address: "Jl. Jalan",
-	}, nil
+	func (r *queryResolver) Student(ctx context.Context, nim string) ( *model.Student,  error){
+		return r.Repository.GetStudent(nim)
+	}
 
-}
+// !!! WARNING !!!
+	func (r *queryResolver) Students(ctx context.Context) ( []*model.Student,  error){
+		return r.Repository.GetStudents()
+	}
 
 // Lecturer is the resolver for the lecturer field.
-func (r *queryResolver) Lecturer(ctx context.Context, nip string) (*model.Lecturer, error) {
-	panic(fmt.Errorf("not implemented: Lecturer - lecturer"))
-}
+	func (r *queryResolver) Lecturer(ctx context.Context, nip string) ( *model.Lecturer,  error){
+		return r.Repository.GetLecturer(nip)
+	}
+
+// Lecturers is the resolver for the lecturers field.
+	func (r *queryResolver) Lecturers(ctx context.Context) ( []*model.Lecturer,  error){
+		return r.Repository.GetLecturers()
+	}
 
 // Course is the resolver for the course field.
-func (r *queryResolver) Course(ctx context.Context, code string) (*model.Course, error) {
-	panic(fmt.Errorf("not implemented: Course - course"))
-}
+	func (r *queryResolver) Course(ctx context.Context, code string) ( *model.Course,  error){
+		return r.Repository.GetCourse(code)
+	}
 
-// StudentCourse is the resolver for the studentCourse field.
-func (r *queryResolver) StudentCourse(ctx context.Context, student string) ([]*model.StudentCourse, error) {
-	panic(fmt.Errorf("not implemented: StudentCourse - studentCourse"))
-}
+// Courses is the resolver for the courses field.
+	func (r *queryResolver) Courses(ctx context.Context) ( []*model.Course,  error){
+		return r.Repository.GetCourses()
+	}
+
+// Enrollment is the resolver for the enrollment field.
+	func (r *queryResolver) Enrollment(ctx context.Context, student string, course string) ( *model.Enrollment,  error){
+		return r.Repository.GetEnrollment(student, course)
+	}
+
+// Enrollments is the resolver for the enrollments field.
+	func (r *queryResolver) Enrollments(ctx context.Context) ( []*model.Enrollment,  error){
+		return r.Repository.GetEnrollments()
+	}
+
+
 
 // Mutation returns MutationResolver implementation.
-func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
-
+	func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 // Query returns QueryResolver implementation.
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+	func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-type mutationResolver struct{ *Resolver }
-type queryResolver struct{ *Resolver }
+
+type mutationResolver struct { *Resolver }
+type queryResolver struct { *Resolver }
+
+
+

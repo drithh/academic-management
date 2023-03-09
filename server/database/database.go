@@ -3,28 +3,29 @@ package database
 import (
 	"os"
 
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
+	"github.com/go-pg/pg/v10"
 )
 
-// Connect to database
-func Connect() *gorm.DB {
-	user := os.Getenv("POSTGRE_USER")
-	password := os.Getenv("POSTGRE_PASSWORD")
-	name := os.Getenv("POSTGRE_DB")
-
-	
-	
-	db, err := gorm.Open(postgres.Open(
-		"host=localhost user="+user+" password="+password+" dbname="+name+" port=5432 sslmode=disable",
-	), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+// func (d DBLogger) AfterQuery(ctx context.Context, q *pg.QueryEvent) (context.Context, error) {
+// 	query, err := q.FormattedQuery()
+// 	if err != nil {
+// 		return ctx, err
+// 	}
+// 	fmt.Println(string(query))
+// 	return ctx, nil
+// }
+func New () *pg.DB {
+	db := pg.Connect(&pg.Options{
+		Addr:     "postgres:5432",
+		User:     os.Getenv("POSTGRES_USER"),
+		Password: os.Getenv("POSTGRES_PASSWORD"),
+		Database: os.Getenv("POSTGRES_DB"),
 	})
-	if err != nil {
-		panic(err)
-	}
 	return db
+}
+
+func Close (db *pg.DB) {
+	db.Close()
 }
 
 

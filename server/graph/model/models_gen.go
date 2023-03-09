@@ -18,6 +18,18 @@ type CourseInput struct {
 	Lecturer string `json:"Lecturer"`
 }
 
+type Enrollment struct {
+	Student *Student `json:"Student"`
+	Course  *Course  `json:"Course"`
+	Grade   int      `json:"Grade"`
+}
+
+type EnrollmentInput struct {
+	Student string `json:"Student"`
+	Course  string `json:"Course"`
+	Grade   int    `json:"Grade"`
+}
+
 type Lecturer struct {
 	Nip     string `json:"NIP"`
 	Name    string `json:"Name"`
@@ -34,18 +46,6 @@ type Student struct {
 	Nim     string `json:"NIM"`
 	Name    string `json:"Name"`
 	Address string `json:"Address"`
-}
-
-type StudentCourse struct {
-	Student *Student `json:"Student"`
-	Course  *Course  `json:"Course"`
-	Grade   int      `json:"Grade"`
-}
-
-type StudentCourseInput struct {
-	Student string `json:"Student"`
-	Course  string `json:"Course"`
-	Grade   int    `json:"Grade"`
 }
 
 type StudentInput struct {
