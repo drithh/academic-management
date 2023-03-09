@@ -22,7 +22,7 @@ type Course {
   Lecturer: Lecturer!
 }
 
-type StudentCourse {
+type Enrollment {
   Student: Student!
   Course: Course!
   Grade: Int!
@@ -48,7 +48,7 @@ input CourseInput {
   Lecturer: String!
 }
 
-input StudentCourseInput {
+input EnrollmentInput {
   Student: String!
   Course: String!
   Grade: Int!
@@ -58,12 +58,12 @@ type Query {
   student(NIM: String!): Student
   lecturer(NIP: String!): Lecturer
   course(Code: String!): Course
-  studentCourse(Student: String!): [StudentCourse]
+  enrollment(Student: String!, Course: String!): Enrollment
 }
 
 type Mutation {
   createStudent(input: StudentInput!): Student
   createLecturer(input: LecturerInput!): Lecturer
   createCourse(input: CourseInput!): Course
-  createStudentCourse(input: StudentCourseInput!): StudentCourse
+  createEnrollment(input: EnrollmentInput!): Enrollment
 }
