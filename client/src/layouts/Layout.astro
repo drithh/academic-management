@@ -1,6 +1,7 @@
 ---
+import Header from "../components/Header.astro";
 import GoogleFont from "./Font.astro";
-
+import "../styles/global.css";
 export interface Props {
 	title: string;
 }
@@ -18,8 +19,8 @@ const { title } = Astro.props;
 		<GoogleFont />
 		<title>{title}</title>
 	</head>
-	<body>
-		<p class="font-heading">Hello, world!</p>
+	<body class="font-body max-w-4xl mx-auto min-h-screen px-4 sm:px-8 py-8">
+		<Header />
 		<slot />
 	</body>
 </html>
