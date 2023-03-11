@@ -1,5 +1,8 @@
 import Header from './components/Header';
 import Student from './components/Student';
+import Lecturer from './components/Lecturer';
+import Course from './components/Course';
+import Enrollment from './components/Enrollment';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 function App() {
@@ -11,9 +14,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Student />} />
           <Route path="/students" element={<Student />} />
-          <Route path="/lecturers" element={<div>Lecturers</div>} />
-          <Route path="/courses" element={<div>Courses</div>} />
-          <Route path="/enrollments" element={<div>Enrollments</div>} />
+          <Route path="/lecturers" element={<Lecturer />} />
+          <Route path="/courses" element={<Course />} />
+          <Route path="/enrollments" element={<Enrollment />} />
         </Routes>
       </div>
     </>

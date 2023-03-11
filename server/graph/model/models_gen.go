@@ -3,31 +3,31 @@
 package model
 
 type Course struct {
-	Code     string    `json:"Code"`
-	Name     string    `json:"Name"`
-	Credit   int       `json:"Credit"`
-	Semester int       `json:"Semester"`
-	Lecturer *Lecturer `json:"Lecturer"`
+	Code        string `json:"Code"`
+	Name        string `json:"Name"`
+	Credit      int    `json:"Credit"`
+	Semester    int    `json:"Semester"`
+	LecturerNip string `json:"LecturerNIP"`
 }
 
 type CourseInput struct {
-	Code     string `json:"Code"`
-	Name     string `json:"Name"`
-	Credit   int    `json:"Credit"`
-	Semester int    `json:"Semester"`
-	Lecturer string `json:"Lecturer"`
+	Code        string `json:"Code"`
+	Name        string `json:"Name"`
+	Credit      int    `json:"Credit"`
+	Semester    int    `json:"Semester"`
+	LecturerNip string `json:"LecturerNIP"`
 }
 
 type Enrollment struct {
-	Student *Student `json:"Student"`
-	Course  *Course  `json:"Course"`
-	Grade   int      `json:"Grade"`
+	StudentNim string  `json:"StudentNIM"`
+	CourseCode string  `json:"CourseCode"`
+	Grade      float64 `json:"Grade"`
 }
 
 type EnrollmentInput struct {
-	Student string `json:"Student"`
-	Course  string `json:"Course"`
-	Grade   int    `json:"Grade"`
+	StudentNim string  `json:"StudentNIM"`
+	CourseCode string  `json:"CourseCode"`
+	Grade      float64 `json:"Grade"`
 }
 
 type Lecturer struct {

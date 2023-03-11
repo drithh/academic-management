@@ -19,13 +19,13 @@ type Course {
   Name: String!
   Credit: Int!
   Semester: Int!
-  Lecturer: Lecturer!
+  LecturerNIP: String!
 }
 
 type Enrollment {
-  Student: Student!
-  Course: Course!
-  Grade: Int!
+  StudentNIM: String!
+  CourseCode: String!
+  Grade: Float!
 }
 
 input StudentInput {
@@ -45,13 +45,13 @@ input CourseInput {
   Name: String!
   Credit: Int!
   Semester: Int!
-  Lecturer: String!
+  LecturerNIP: String!
 }
 
 input EnrollmentInput {
-  Student: String!
-  Course: String!
-  Grade: Int!
+  StudentNIM: String!
+  CourseCode: String!
+  Grade: Float!
 }
 
 type Query {
@@ -61,7 +61,7 @@ type Query {
   lecturers: [Lecturer]
   course(Code: String!): Course
   courses: [Course]
-  enrollment(Student: String!, Course: String!): Enrollment
+  enrollment(StudentNIM: String!, CourseCode: String!): Enrollment
   enrollments: [Enrollment]
 }
 
@@ -77,5 +77,5 @@ type Mutation {
   deleteCourse(Code: String!): Course
   createEnrollment(input: EnrollmentInput!): Enrollment
   updateEnrollment(input: EnrollmentInput!): Enrollment
-  deleteEnrollment(Student: String!, Course: String!): Enrollment
+  deleteEnrollment(StudentNIM: String!, CourseCode: String!): Enrollment
 }

@@ -6,90 +6,90 @@ import Modal from './Modal';
 import Input from './Input';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { graphql } from '../gql';
-import type { Student } from '../gql/types';
+import type { Lecturer } from '../gql/types';
 import { toast } from 'react-hot-toast';
 
-const GET_STUDENTS = graphql(/* GraphQL */ `
-  query GetStudents {
-    students {
-      NIM
+const GET_LECTURERS = graphql(/* GraphQL */ `
+  query GetLecturer {
+    lecturers {
+      NIP
       Name
       Address
     }
   }
 `);
 
-const CREATE_STUDENT = graphql(/* GraphQL */ `
-  mutation CreateStudent($input: StudentInput!) {
-    createStudent(input: $input) {
-      NIM
+const CREATE_LECTURER = graphql(/* GraphQL */ `
+  mutation CreateLecturer($input: LecturerInput!) {
+    createLecturer(input: $input) {
+      NIP
       Name
       Address
     }
   }
 `);
 
-const UPDATE_STUDENT = graphql(/* GraphQL */ `
-  mutation UpdateStudent($input: StudentInput!) {
-    updateStudent(input: $input) {
-      NIM
+const UPDATE_LECTURER = graphql(/* GraphQL */ `
+  mutation UpdateLecturer($input: LecturerInput!) {
+    updateLecturer(input: $input) {
+      NIP
       Name
       Address
     }
   }
 `);
 
-const DELETE_STUDENT = graphql(/* GraphQL */ `
-  mutation DeleteStudent($NIM: String!) {
-    deleteStudent(NIM: $NIM) {
-      NIM
+const DELETE_LECTURER = graphql(/* GraphQL */ `
+  mutation DeleteLecturer($NIP: String!) {
+    deleteLecturer(NIP: $NIP) {
+      NIP
       Name
       Address
     }
   }
 `);
 
-export default function Student() {
-  const [showAddStudentModal, setShowAddStudentModal] = useState(false);
-  const [showEditStudentModal, setShowEditStudentModal] = useState(false);
-  const [currentStudent, setCurrentStudent] = useState<Student>();
-  const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
+export default function Lecturer() {
+  const [showAddLecturerModal, setShowAddLecturerModal] = useState(false);
+  const [showEditLecturerModal, setShowEditLecturerModal] = useState(false);
+  const [currentLecturer, setCurrentLecturer] = useState<Lecturer>();
+  const [showDeleteLecturerModal, setShowDeleteLecturerModal] = useState(false);
 
-  const [data, setData] = React.useState<Student[]>();
+  const [data, setData] = React.useState<Lecturer[]>();
 
-  const { loading, error, data: dataQuery } = useQuery(GET_STUDENTS);
+  const { loading, error, data: dataQuery } = useQuery(GET_LECTURERS);
 
-  const handleAddStudent = () => {
-    setShowAddStudentModal(true);
+  const handleAddLecturer = () => {
+    setShowAddLecturerModal(true);
   };
 
-  const handleCloseAddStudentModal = () => {
-    setShowAddStudentModal(false);
+  const handleCloseAddLecturerModal = () => {
+    setShowAddLecturerModal(false);
   };
 
-  const handleEditStudent = (data: Student) => {
-    setCurrentStudent(data);
-    setShowEditStudentModal(true);
+  const handleEditLecturer = (data: Lecturer) => {
+    setCurrentLecturer(data);
+    setShowEditLecturerModal(true);
   };
 
-  const handleCloseEditStudentModal = () => {
-    setShowEditStudentModal(false);
+  const handleCloseEditLecturerModal = () => {
+    setShowEditLecturerModal(false);
   };
 
-  const handleDeleteStudent = (data: Student) => {
-    setCurrentStudent(data);
-    setShowDeleteStudentModal(true);
+  const handleDeleteLecturer = (data: Lecturer) => {
+    setCurrentLecturer(data);
+    setShowDeleteLecturerModal(true);
   };
 
-  const handleCloseDeleteStudentModal = () => {
-    setShowDeleteStudentModal(false);
+  const handleCloseDeleteLecturerModal = () => {
+    setShowDeleteLecturerModal(false);
   };
 
-  const columns = React.useMemo<ColumnDef<Student, any>[]>(
+  const columns = React.useMemo<ColumnDef<Lecturer, any>[]>(
     () => [
       {
-        accessorKey: 'NIM',
-        header: () => 'Nim',
+        accessorKey: 'NIP',
+        header: () => 'Nip',
         size: 30,
         footer: (props) => props.column.id,
       },
@@ -109,15 +109,15 @@ export default function Student() {
         size: 60,
         footer: (props) => props.column.id,
       },
-      ...ActionColumn<Student>(handleEditStudent, handleDeleteStudent),
+      ...ActionColumn<Lecturer>(handleEditLecturer, handleDeleteLecturer),
     ],
     []
   );
 
   useEffect(() => {
-    if (dataQuery?.students) {
-      const students = dataQuery.students as Student[];
-      setData(students);
+    if (dataQuery?.lecturers) {
+      const lecturers = dataQuery.lecturers as Lecturer[];
+      setData(lecturers);
     }
   }, [dataQuery]);
 
@@ -127,59 +127,59 @@ export default function Student() {
 
   return (
     <>
-      <AddStudent
-        handleCloseModal={handleCloseAddStudentModal}
-        showModal={showAddStudentModal}
+      <AddLecturer
+        handleCloseModal={handleCloseAddLecturerModal}
+        showModal={showAddLecturerModal}
       />
-      <EditStudent
-        data={currentStudent}
-        handleCloseModal={handleCloseEditStudentModal}
-        showModal={showEditStudentModal}
+      <EditLecturer
+        data={currentLecturer}
+        handleCloseModal={handleCloseEditLecturerModal}
+        showModal={showEditLecturerModal}
       />
-      <DeleteStudent
-        data={currentStudent}
-        handleCloseModal={handleCloseDeleteStudentModal}
-        showModal={showDeleteStudentModal}
+      <DeleteLecturer
+        data={currentLecturer}
+        handleCloseModal={handleCloseDeleteLecturerModal}
+        showModal={showDeleteLecturerModal}
       />
 
-      <Table data={data} columns={columns} handleAddData={handleAddStudent} />
+      <Table data={data} columns={columns} handleAddData={handleAddLecturer} />
     </>
   );
 }
 
-interface AddStudentProps {
+interface AddLecturerProps {
   handleCloseModal: () => void;
   showModal: boolean;
 }
 
-function AddStudent({ handleCloseModal, showModal }: AddStudentProps) {
+function AddLecturer({ handleCloseModal, showModal }: AddLecturerProps) {
   const [errorMsg, setErrorMsg] = useState('');
-  const [nim, setNim] = useState('');
+  const [nip, setNip] = useState('');
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
-  const [addStudent, { data, loading, error }] = useMutation(CREATE_STUDENT, {
-    refetchQueries: [{ query: GET_STUDENTS }],
+  const [addLecturer, { data, loading, error }] = useMutation(CREATE_LECTURER, {
+    refetchQueries: [{ query: GET_LECTURERS }],
     onError: (error) => {
       toast.error(error.message);
       setErrorMsg(error.message);
     },
     onCompleted: () => {
-      toast.success('Student added successfully');
+      toast.success('Lecturer added successfully');
       closeModal();
     },
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (nim === '' || name === '' || address === '') {
+    if (nip === '' || name === '' || address === '') {
       setErrorMsg('Please fill all the required fields');
       return;
     }
 
-    addStudent({
+    addLecturer({
       variables: {
         input: {
-          NIM: nim,
+          NIP: nip,
           Name: name,
           Address: address,
         },
@@ -192,7 +192,7 @@ function AddStudent({ handleCloseModal, showModal }: AddStudentProps) {
 
   const closeModal = () => {
     setErrorMsg('');
-    setNim('');
+    setNip('');
     setName('');
     setAddress('');
     handleCloseModal();
@@ -200,7 +200,7 @@ function AddStudent({ handleCloseModal, showModal }: AddStudentProps) {
 
   return (
     <Modal
-      title="Add Student"
+      title="Add Lecturer"
       showModal={showModal}
       error={errorMsg}
       handleCloseModal={closeModal}
@@ -208,15 +208,15 @@ function AddStudent({ handleCloseModal, showModal }: AddStudentProps) {
     >
       <Input
         type="text"
-        placeholder={'NIM *'}
-        name="nim"
+        placeholder={'NIP *'}
+        name="nip"
         required
         extraClass={`w-full focus:border-gray-500 mb-4 ${
           errorMsg ? 'border-red-300' : ''
         }`}
         border="border-2 border-gray-300 mb-4"
-        onChange={(e) => setNim(e.currentTarget.value)}
-        value={nim}
+        onChange={(e) => setNip(e.currentTarget.value)}
+        value={nip}
       />
       <Input
         type="text"
@@ -246,41 +246,45 @@ function AddStudent({ handleCloseModal, showModal }: AddStudentProps) {
   );
 }
 
-interface EditStudentProps {
+interface EditLecturerProps {
   handleCloseModal: () => void;
   showModal: boolean;
-  data: Student | undefined;
+  data: Lecturer | undefined;
 }
 
-function EditStudent({ handleCloseModal, showModal, data }: EditStudentProps) {
+function EditLecturer({
+  handleCloseModal,
+  showModal,
+  data,
+}: EditLecturerProps) {
   const [errorMsg, setErrorMsg] = useState('');
-  const [nim, setNim] = useState(data?.NIM);
+  const [nip, setNip] = useState(data?.NIP);
   const [name, setName] = useState(data?.Name);
   const [address, setAddress] = useState(data?.Address);
 
-  const [editStudent, { loading, error }] = useMutation(UPDATE_STUDENT, {
-    refetchQueries: [{ query: GET_STUDENTS }],
+  const [editLecturer, { loading, error }] = useMutation(UPDATE_LECTURER, {
+    refetchQueries: [{ query: GET_LECTURERS }],
     onError: (error) => {
       toast.error(error.message);
       setErrorMsg(error.message);
     },
     onCompleted: () => {
-      toast.success('Student updated successfully');
+      toast.success('Lecturer updated successfully');
       handleCloseModal();
     },
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (nim === undefined || name === undefined || address === undefined) {
+    if (nip === undefined || name === undefined || address === undefined) {
       setErrorMsg('Please fill all the required fields');
       return;
     }
 
-    editStudent({
+    editLecturer({
       variables: {
         input: {
-          NIM: nim,
+          NIP: nip,
           Name: name,
           Address: address,
         },
@@ -292,28 +296,28 @@ function EditStudent({ handleCloseModal, showModal, data }: EditStudentProps) {
   };
 
   useEffect(() => {
-    setNim(data?.NIM);
+    setNip(data?.NIP);
     setName(data?.Name);
     setAddress(data?.Address);
   }, [data]);
   return (
     <Modal
-      title="Edit Student"
+      title="Edit Lecturer"
       showModal={showModal}
       handleCloseModal={handleCloseModal}
       handleSubmit={handleSubmit}
     >
       <Input
         type="text"
-        placeholder={'NIM *'}
-        name="nim"
+        placeholder={'NIP *'}
+        name="nip"
         required
         extraClass={`w-full focus:border-gray-500 mb-4 ${
           errorMsg ? 'border-red-300' : ''
         }`}
         border="border-2 border-gray-300 mb-4"
-        onChange={(e) => setNim(e.currentTarget.value)}
-        value={nim}
+        onChange={(e) => setNip(e.currentTarget.value)}
+        value={nip}
       />
       <Input
         type="text"
@@ -343,26 +347,26 @@ function EditStudent({ handleCloseModal, showModal, data }: EditStudentProps) {
   );
 }
 
-interface DeleteStudentProps {
+interface DeleteLecturerProps {
   handleCloseModal: () => void;
   showModal: boolean;
-  data: Student | undefined;
+  data: Lecturer | undefined;
 }
 
-function DeleteStudent({
+function DeleteLecturer({
   handleCloseModal,
   showModal,
   data,
-}: DeleteStudentProps) {
+}: DeleteLecturerProps) {
   const [errorMsg, setErrorMsg] = useState('');
-  const [deleteStudent, { loading, error }] = useMutation(DELETE_STUDENT, {
-    refetchQueries: [{ query: GET_STUDENTS }],
+  const [deleteLecturer, { loading, error }] = useMutation(DELETE_LECTURER, {
+    refetchQueries: [{ query: GET_LECTURERS }],
     onError: (error) => {
       toast.error(error.message);
       setErrorMsg(error.message);
     },
     onCompleted: () => {
-      toast.success('Student deleted successfully');
+      toast.success('Lecturer deleted successfully');
       handleCloseModal();
     },
   });
@@ -370,14 +374,14 @@ function DeleteStudent({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (data?.NIM === undefined) {
+    if (data?.NIP === undefined) {
       setErrorMsg('Please fill all the required fields');
       return;
     }
 
-    deleteStudent({
+    deleteLecturer({
       variables: {
-        NIM: data.NIM,
+        NIP: data.NIP,
       },
     });
     if (error) {
@@ -389,7 +393,7 @@ function DeleteStudent({
 
   return (
     <Modal
-      title="Delete Student"
+      title="Delete Lecturer"
       showModal={showModal}
       handleCloseModal={handleCloseModal}
       handleSubmit={handleSubmit}

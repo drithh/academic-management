@@ -99,7 +99,7 @@ func (r *Repository) GetEnrollments() ([]*model.Enrollment, error) {
 
 func (r *Repository) GetEnrollment(student string, course string) (*model.Enrollment, error) {
 	var enrollment model.Enrollment
-	err := r.DB.Model(&enrollment).Where("student = ? AND course = ?", student, course).Select()
+	err := r.DB.Model(&enrollment).Where("student_nim = ? AND course_code = ?", student, course).Select()
 	return &enrollment, err
 }
 
@@ -109,12 +109,12 @@ func (r *Repository) CreateEnrollment(enrollment *model.Enrollment) error {
 }
 
 func (r *Repository) UpdateEnrollment(enrollment *model.Enrollment) error {
-	_, err := r.DB.Model(enrollment).Where("student = ? AND course = ?", enrollment.Student, enrollment.Course).Update()
+	_, err := r.DB.Model(enrollment).Where("student_nim = ? AND course_code = ?", enrollment.StudentNim, enrollment.CourseCode).Update()
 	return err
 }
 
 func (r *Repository) DeleteEnrollment(student string, course string) error {
-	_, err := r.DB.Model(&model.Enrollment{}).Where("student = ? AND course = ?", student, course).Delete()
+	_, err := r.DB.Model(&model.Enrollment{}).Where("student_nim = ? AND course_code = ?", student, course).Delete()
 	return err
 }
 

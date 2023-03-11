@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <header>
       <h1 className="text-5xl font-bold text-center uppercase mb-8 bg-gradient-to-br from-[#334155] via-[#1e293b] to-[#0f172a] dark:from-primary-main dark:via-primary-main dark:to-primary-main bg-clip-text text-transparent">
-        Student Management System
+        Academic Management System
       </h1>
       <nav>
         <section className=" text-lg w-full">

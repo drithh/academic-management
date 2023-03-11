@@ -16,6 +16,8 @@ func main() {
 
 	defer DB.Close()
 
+	DB.AddQueryHook(database.DBLogger{})
+	
 
 
 	router := chi.NewRouter()

@@ -58,7 +58,7 @@ export default function Modal({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="relative my-8 inline-block w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all">
+            <div className="relative my-8 inline-block w-full max-w-md transform bg-white p-6 text-left align-middle shadow-xl transition-all">
               <button
                 type="button"
                 className="absolute right-4 top-3 p-1 rounded-full hover:bg-gray-200 outline-none focus:outline-none"

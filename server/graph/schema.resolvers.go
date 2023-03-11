@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/drithh/multi-tier-architecture/graph/model"
 )
@@ -81,8 +82,11 @@ func (r *mutationResolver) DeleteLecturer(ctx context.Context, nip string) (*mod
 // CreateCourse is the resolver for the createCourse field.
 func (r *mutationResolver) CreateCourse(ctx context.Context, input model.CourseInput) (*model.Course, error) {
 	course := &model.Course{
-		Code: input.Code,
-		Name: input.Name,
+		Code:        input.Code,
+		Name:        input.Name,
+		Credit:      input.Credit,
+		Semester:    input.Semester,
+		LecturerNip: input.LecturerNip,
 	}
 	err := r.Repository.CreateCourse(course)
 
@@ -97,6 +101,10 @@ func (r *mutationResolver) UpdateCourse(ctx context.Context, input model.CourseI
 		return nil, err
 	}
 	course.Name = input.Name
+	course.Code = input.Code
+	course.Semester = input.Semester
+	course.LecturerNip = input.LecturerNip
+
 	err = r.Repository.UpdateCourse(course)
 	return course, err
 }
@@ -113,20 +121,12 @@ func (r *mutationResolver) DeleteCourse(ctx context.Context, code string) (*mode
 
 // CreateEnrollment is the resolver for the createEnrollment field.
 func (r *mutationResolver) CreateEnrollment(ctx context.Context, input model.EnrollmentInput) (*model.Enrollment, error) {
-	student, err := r.Repository.GetStudent(input.Student)
-	if err != nil {
-		return nil, err
-	}
-	course, err := r.Repository.GetCourse(input.Course)
-	if err != nil {
-		return nil, err
-	}
 	enrollment := &model.Enrollment{
-		Student: student,
-		Course:  course,
-		Grade:   input.Grade,
+		StudentNim: input.StudentNim,
+		CourseCode: input.CourseCode,
+		Grade:      input.Grade,
 	}
-	err = r.Repository.CreateEnrollment(enrollment)
+	err := r.Repository.CreateEnrollment(enrollment)
 	if err != nil {
 		return nil, err
 	}
@@ -136,20 +136,13 @@ func (r *mutationResolver) CreateEnrollment(ctx context.Context, input model.Enr
 
 // UpdateEnrollment is the resolver for the updateEnrollment field.
 func (r *mutationResolver) UpdateEnrollment(ctx context.Context, input model.EnrollmentInput) (*model.Enrollment, error) {
-	student, err := r.Repository.GetStudent(input.Student)
-	if err != nil {
-		return nil, err
-	}
-	course, err := r.Repository.GetCourse(input.Course)
-	if err != nil {
-		return nil, err
-	}
 	enrollment := &model.Enrollment{
-		Student: student,
-		Course:  course,
-		Grade:   input.Grade,
+		StudentNim: input.StudentNim,
+		CourseCode: input.CourseCode,
+		Grade:      input.Grade,
 	}
-	err = r.Repository.UpdateEnrollment(enrollment)
+	fmt.Println(enrollment)
+	err := r.Repository.UpdateEnrollment(enrollment)
 	if err != nil {
 		return nil, err
 	}
@@ -158,12 +151,12 @@ func (r *mutationResolver) UpdateEnrollment(ctx context.Context, input model.Enr
 }
 
 // DeleteEnrollment is the resolver for the deleteEnrollment field.
-func (r *mutationResolver) DeleteEnrollment(ctx context.Context, student string, course string) (*model.Enrollment, error) {
-	enrollment, err := r.Repository.GetEnrollment(student, course)
+func (r *mutationResolver) DeleteEnrollment(ctx context.Context, studentNim string, courseCode string) (*model.Enrollment, error) {
+	enrollment, err := r.Repository.GetEnrollment(studentNim, courseCode)
 	if err != nil {
 		return nil, err
 	}
-	err = r.Repository.DeleteEnrollment(student, course)
+	err = r.Repository.DeleteEnrollment(studentNim, courseCode)
 	return enrollment, err
 }
 
@@ -198,8 +191,8 @@ func (r *queryResolver) Courses(ctx context.Context) ([]*model.Course, error) {
 }
 
 // Enrollment is the resolver for the enrollment field.
-func (r *queryResolver) Enrollment(ctx context.Context, student string, course string) (*model.Enrollment, error) {
-	return r.Repository.GetEnrollment(student, course)
+func (r *queryResolver) Enrollment(ctx context.Context, studentNim string, courseCode string) (*model.Enrollment, error) {
+	return r.Repository.GetEnrollment(studentNim, courseCode)
 }
 
 // Enrollments is the resolver for the enrollments field.
