@@ -67,7 +67,15 @@ type Query {
 
 type Mutation {
   createStudent(input: StudentInput!): Student
+  updateStudent(input: StudentInput!): Student
+  deleteStudent(NIM: String!): Student
   createLecturer(input: LecturerInput!): Lecturer
+  updateLecturer(input: LecturerInput!): Lecturer
+  deleteLecturer(NIP: String!): Lecturer
   createCourse(input: CourseInput!): Course
+  updateCourse(input: CourseInput!): Course
+  deleteCourse(Code: String!): Course
   createEnrollment(input: EnrollmentInput!): Enrollment
+  updateEnrollment(input: EnrollmentInput!): Enrollment
+  deleteEnrollment(Student: String!, Course: String!): Enrollment
 }

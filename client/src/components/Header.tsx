@@ -36,7 +36,11 @@ function Tab({ tab }: { tab: string }) {
     <Link
       to={`/${tab}`}
       className={`relative underline-none animated-link
-      ${location.pathname === `/${tab}` && 'show'}`}
+      ${
+        (location.pathname === `/${tab}` ||
+          (location.pathname === '' && tab === 'students')) &&
+        'show'
+      }`}
     >
       {tab}
     </Link>

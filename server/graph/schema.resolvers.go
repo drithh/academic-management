@@ -11,128 +11,207 @@ import (
 )
 
 // CreateStudent is the resolver for the createStudent field.
-	func (r *mutationResolver) CreateStudent(ctx context.Context, input model.StudentInput) ( *model.Student,  error){
-		studentInput := &model.StudentInput{
+func (r *mutationResolver) CreateStudent(ctx context.Context, input model.StudentInput) (*model.Student, error) {
+	student := &model.Student{
 		Nim:     input.Nim,
 		Name:    input.Name,
 		Address: input.Address,
 	}
-	err := r.Repository.CreateStudent(studentInput)
-	student := &model.Student{
-		Nim:     studentInput.Nim,
-		Name:    studentInput.Name,
-		Address: studentInput.Address,
-	}
+	err := r.Repository.CreateStudent(student)
 	return student, err
+}
+
+// UpdateStudent is the resolver for the updateStudent field.
+func (r *mutationResolver) UpdateStudent(ctx context.Context, input model.StudentInput) (*model.Student, error) {
+	nim := input.Nim
+	student, err := r.Repository.GetStudent(nim)
+	if err != nil {
+		return nil, err
 	}
+	student.Name = input.Name
+	student.Address = input.Address
+	err = r.Repository.UpdateStudent(student)
+	return student, err
+}
+
+// DeleteStudent is the resolver for the deleteStudent field.
+func (r *mutationResolver) DeleteStudent(ctx context.Context, nim string) (*model.Student, error) {
+	student, err := r.Repository.GetStudent(nim)
+	if err != nil {
+		return nil, err
+	}
+	err = r.Repository.DeleteStudent(nim)
+	return student, err
+}
 
 // CreateLecturer is the resolver for the createLecturer field.
-	func (r *mutationResolver) CreateLecturer(ctx context.Context, input model.LecturerInput) ( *model.Lecturer,  error){
-		lecturerInput := &model.LecturerInput{
+func (r *mutationResolver) CreateLecturer(ctx context.Context, input model.LecturerInput) (*model.Lecturer, error) {
+	lecturer := &model.Lecturer{
 		Nip:     input.Nip,
 		Name:    input.Name,
 		Address: input.Address,
 	}
-	err := r.Repository.CreateLecturer(lecturerInput)
-	lecturer := &model.Lecturer{
-		Nip:     lecturerInput.Nip,
-		Name:    lecturerInput.Name,
-		Address: lecturerInput.Address,
-	}
+	err := r.Repository.CreateLecturer(lecturer)
 	return lecturer, err
+}
+
+// UpdateLecturer is the resolver for the updateLecturer field.
+func (r *mutationResolver) UpdateLecturer(ctx context.Context, input model.LecturerInput) (*model.Lecturer, error) {
+	nip := input.Nip
+	lecturer, err := r.Repository.GetLecturer(nip)
+	if err != nil {
+		return nil, err
 	}
+	lecturer.Name = input.Name
+	lecturer.Address = input.Address
+	err = r.Repository.UpdateLecturer(lecturer)
+	return lecturer, err
+}
+
+// DeleteLecturer is the resolver for the deleteLecturer field.
+func (r *mutationResolver) DeleteLecturer(ctx context.Context, nip string) (*model.Lecturer, error) {
+	lecturer, err := r.Repository.GetLecturer(nip)
+	if err != nil {
+		return nil, err
+	}
+	err = r.Repository.DeleteLecturer(nip)
+	return lecturer, err
+}
 
 // CreateCourse is the resolver for the createCourse field.
-	func (r *mutationResolver) CreateCourse(ctx context.Context, input model.CourseInput) ( *model.Course,  error){
-		courseInput := &model.CourseInput{
+func (r *mutationResolver) CreateCourse(ctx context.Context, input model.CourseInput) (*model.Course, error) {
+	course := &model.Course{
 		Code: input.Code,
 		Name: input.Name,
 	}
-	err := r.Repository.CreateCourse(courseInput)
-	course := &model.Course{
-		Code: courseInput.Code,
-		Name: courseInput.Name,
-	}
+	err := r.Repository.CreateCourse(course)
+
 	return course, err
+}
+
+// UpdateCourse is the resolver for the updateCourse field.
+func (r *mutationResolver) UpdateCourse(ctx context.Context, input model.CourseInput) (*model.Course, error) {
+	code := input.Code
+	course, err := r.Repository.GetCourse(code)
+	if err != nil {
+		return nil, err
 	}
+	course.Name = input.Name
+	err = r.Repository.UpdateCourse(course)
+	return course, err
+}
+
+// DeleteCourse is the resolver for the deleteCourse field.
+func (r *mutationResolver) DeleteCourse(ctx context.Context, code string) (*model.Course, error) {
+	course, err := r.Repository.GetCourse(code)
+	if err != nil {
+		return nil, err
+	}
+	err = r.Repository.DeleteCourse(code)
+	return course, err
+}
 
 // CreateEnrollment is the resolver for the createEnrollment field.
-	func (r *mutationResolver) CreateEnrollment(ctx context.Context, input model.EnrollmentInput) ( *model.Enrollment,  error){
-		enrollmentInput := &model.EnrollmentInput{
-		Student: input.Student,
-		Course:  input.Course,
-		Grade:   input.Grade,
-	}
-	err := r.Repository.CreateEnrollment(enrollmentInput)
+func (r *mutationResolver) CreateEnrollment(ctx context.Context, input model.EnrollmentInput) (*model.Enrollment, error) {
+	student, err := r.Repository.GetStudent(input.Student)
 	if err != nil {
 		return nil, err
 	}
-	student, err := r.Repository.GetStudent(enrollmentInput.Student)
-	if err != nil {
-		return nil, err
-	}
-	course, err := r.Repository.GetCourse(enrollmentInput.Course)
+	course, err := r.Repository.GetCourse(input.Course)
 	if err != nil {
 		return nil, err
 	}
 	enrollment := &model.Enrollment{
 		Student: student,
 		Course:  course,
-		Grade:   enrollmentInput.Grade,
+		Grade:   input.Grade,
 	}
+	err = r.Repository.CreateEnrollment(enrollment)
+	if err != nil {
+		return nil, err
+	}
+
 	return enrollment, err
+}
+
+// UpdateEnrollment is the resolver for the updateEnrollment field.
+func (r *mutationResolver) UpdateEnrollment(ctx context.Context, input model.EnrollmentInput) (*model.Enrollment, error) {
+	student, err := r.Repository.GetStudent(input.Student)
+	if err != nil {
+		return nil, err
 	}
+	course, err := r.Repository.GetCourse(input.Course)
+	if err != nil {
+		return nil, err
+	}
+	enrollment := &model.Enrollment{
+		Student: student,
+		Course:  course,
+		Grade:   input.Grade,
+	}
+	err = r.Repository.UpdateEnrollment(enrollment)
+	if err != nil {
+		return nil, err
+	}
+
+	return enrollment, err
+}
+
+// DeleteEnrollment is the resolver for the deleteEnrollment field.
+func (r *mutationResolver) DeleteEnrollment(ctx context.Context, student string, course string) (*model.Enrollment, error) {
+	enrollment, err := r.Repository.GetEnrollment(student, course)
+	if err != nil {
+		return nil, err
+	}
+	err = r.Repository.DeleteEnrollment(student, course)
+	return enrollment, err
+}
 
 // Student is the resolver for the student field.
-	func (r *queryResolver) Student(ctx context.Context, nim string) ( *model.Student,  error){
-		return r.Repository.GetStudent(nim)
-	}
+func (r *queryResolver) Student(ctx context.Context, nim string) (*model.Student, error) {
+	return r.Repository.GetStudent(nim)
+}
 
 // !!! WARNING !!!
-	func (r *queryResolver) Students(ctx context.Context) ( []*model.Student,  error){
-		return r.Repository.GetStudents()
-	}
+func (r *queryResolver) Students(ctx context.Context) ([]*model.Student, error) {
+	return r.Repository.GetStudents()
+}
 
 // Lecturer is the resolver for the lecturer field.
-	func (r *queryResolver) Lecturer(ctx context.Context, nip string) ( *model.Lecturer,  error){
-		return r.Repository.GetLecturer(nip)
-	}
+func (r *queryResolver) Lecturer(ctx context.Context, nip string) (*model.Lecturer, error) {
+	return r.Repository.GetLecturer(nip)
+}
 
 // Lecturers is the resolver for the lecturers field.
-	func (r *queryResolver) Lecturers(ctx context.Context) ( []*model.Lecturer,  error){
-		return r.Repository.GetLecturers()
-	}
+func (r *queryResolver) Lecturers(ctx context.Context) ([]*model.Lecturer, error) {
+	return r.Repository.GetLecturers()
+}
 
 // Course is the resolver for the course field.
-	func (r *queryResolver) Course(ctx context.Context, code string) ( *model.Course,  error){
-		return r.Repository.GetCourse(code)
-	}
+func (r *queryResolver) Course(ctx context.Context, code string) (*model.Course, error) {
+	return r.Repository.GetCourse(code)
+}
 
 // Courses is the resolver for the courses field.
-	func (r *queryResolver) Courses(ctx context.Context) ( []*model.Course,  error){
-		return r.Repository.GetCourses()
-	}
+func (r *queryResolver) Courses(ctx context.Context) ([]*model.Course, error) {
+	return r.Repository.GetCourses()
+}
 
 // Enrollment is the resolver for the enrollment field.
-	func (r *queryResolver) Enrollment(ctx context.Context, student string, course string) ( *model.Enrollment,  error){
-		return r.Repository.GetEnrollment(student, course)
-	}
+func (r *queryResolver) Enrollment(ctx context.Context, student string, course string) (*model.Enrollment, error) {
+	return r.Repository.GetEnrollment(student, course)
+}
 
 // Enrollments is the resolver for the enrollments field.
-	func (r *queryResolver) Enrollments(ctx context.Context) ( []*model.Enrollment,  error){
-		return r.Repository.GetEnrollments()
-	}
-
-
+func (r *queryResolver) Enrollments(ctx context.Context) ([]*model.Enrollment, error) {
+	return r.Repository.GetEnrollments()
+}
 
 // Mutation returns MutationResolver implementation.
-	func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+
 // Query returns QueryResolver implementation.
-	func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-
-type mutationResolver struct { *Resolver }
-type queryResolver struct { *Resolver }
-
-
-
+type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }

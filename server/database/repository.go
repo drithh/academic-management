@@ -21,12 +21,13 @@ func (r *Repository) GetStudent(nim string) (*model.Student, error) {
 	return &student, err
 }
 
-func (r *Repository) CreateStudent(student *model.StudentInput) error {
-	_, err := r.DB.Model(student).Insert()
+func (r *Repository) CreateStudent(student *model.Student) error {
+	_, err := r.DB.Model(&student).Insert()
 	return err
+
 }
 
-func (r *Repository) UpdateStudent(student *model.StudentInput) error {
+func (r *Repository) UpdateStudent(student *model.Student) error {
 	_, err := r.DB.Model(student).Where("nim = ?", student.Nim).Update()
 	return err
 }
@@ -48,12 +49,12 @@ func (r *Repository) GetLecturer(nip string) (*model.Lecturer, error) {
 	return &lecturer, err
 }
 
-func (r *Repository) CreateLecturer(lecturer *model.LecturerInput) error {
+func (r *Repository) CreateLecturer(lecturer *model.Lecturer) error {
 	_, err := r.DB.Model(lecturer).Insert()
 	return err
 }
 
-func (r *Repository) UpdateLecturer(lecturer *model.LecturerInput) error {
+func (r *Repository) UpdateLecturer(lecturer *model.Lecturer) error {
 	_, err := r.DB.Model(lecturer).Where("nip = ?", lecturer.Nip).Update()
 	return err
 }
@@ -75,12 +76,12 @@ func (r *Repository) GetCourse(code string) (*model.Course, error) {
 	return &course, err
 }
 
-func (r *Repository) CreateCourse(course *model.CourseInput) error {
+func (r *Repository) CreateCourse(course *model.Course) error {
 	_, err := r.DB.Model(course).Insert()
 	return err
 }
 
-func (r *Repository) UpdateCourse(course *model.CourseInput) error {
+func (r *Repository) UpdateCourse(course *model.Course) error {
 	_, err := r.DB.Model(course).Where("code = ?", course.Code).Update()
 	return err
 }
@@ -102,12 +103,12 @@ func (r *Repository) GetEnrollment(student string, course string) (*model.Enroll
 	return &enrollment, err
 }
 
-func (r *Repository) CreateEnrollment(enrollment *model.EnrollmentInput) error {
+func (r *Repository) CreateEnrollment(enrollment *model.Enrollment) error {
 	_, err := r.DB.Model(enrollment).Insert()
 	return err
 }
 
-func (r *Repository) UpdateEnrollment(enrollment *model.EnrollmentInput) error {
+func (r *Repository) UpdateEnrollment(enrollment *model.Enrollment) error {
 	_, err := r.DB.Model(enrollment).Where("student = ? AND course = ?", enrollment.Student, enrollment.Course).Update()
 	return err
 }

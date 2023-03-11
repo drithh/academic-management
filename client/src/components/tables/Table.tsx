@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { InputHTMLAttributes, useEffect, useState } from 'react';
 
 import {
-  Column,
   Table,
   useReactTable,
   ColumnFiltersState,
@@ -65,13 +64,16 @@ export const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 interface TableProps<T> {
   data: T[];
   columns: ColumnDef<T, any>[];
+  handleAddData: () => void;
 }
 
-export default function Table<T>({ data, columns }: TableProps<T>) {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [globalFilter, setGlobalFilter] = React.useState('');
+export default function Table<T>({
+  data,
+  columns,
+  handleAddData,
+}: TableProps<T>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useReactTable<T>({
     data,
@@ -96,7 +98,7 @@ export default function Table<T>({ data, columns }: TableProps<T>) {
     enableRowSelection: true,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (table.getState().columnFilters[0]?.id === 'fullName') {
       if (table.getState().sorting[0]?.id !== 'fullName') {
         table.setSorting([{ id: 'fullName', desc: false }]);
@@ -109,7 +111,7 @@ export default function Table<T>({ data, columns }: TableProps<T>) {
       <div className="flex justify-between mb-4 mt-8">
         <button
           className="py-2 px-8 uppercase font-lg  border border-black hover:text-white hover:bg-black"
-          // onClick={refreshData}
+          onClick={handleAddData}
         >
           Add Data
         </button>
@@ -130,7 +132,7 @@ export default function Table<T>({ data, columns }: TableProps<T>) {
                   <th
                     key={header.id}
                     colSpan={header.colSpan}
-                    className={`border-y px-2 py-3 border-black uppercases ${
+                    className={`border-y px-2 py-3 border-black uppercase ${
                       header.column.columnDef.header === 'Action'
                         ? 'text-center'
                         : 'text-left'
@@ -266,14 +268,14 @@ function DebouncedInput({
   value: string | number;
   onChange: (value: string | number) => void;
   debounce?: number;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
-  const [value, setValue] = React.useState(initialValue);
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+  const [value, setValue] = useState(initialValue);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timeout = setTimeout(() => {
       onChange(value);
     }, debounce);

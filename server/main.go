@@ -1,36 +1,43 @@
 package main
 
 import (
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/drithh/multi-tier-architecture/database"
 	"github.com/drithh/multi-tier-architecture/graph"
+	"github.com/go-chi/chi"
+	"github.com/rs/cors"
 )
 
-const defaultPort = "8080"
-
 func main() {
-	port := os.Getenv("PORT")
-	println("Port: ", port)
-	if port == "" {
-		port = defaultPort
-	}
-
 	DB := database.New()
 
 	defer DB.Close()
 
+
+
+	router := chi.NewRouter()
+
+	// Add CORS middleware around every request
+	// See https://github.com/rs/cors for full option listing
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+		Debug:            true,
+	}).Handler)
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
 		Repository: &database.Repository{DB: DB},
 	}}))
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+
+	router.Handle("/", playground.Handler("Starwars", "/query"))
+	router.Handle("/query", srv)
+
+	err := http.ListenAndServe(":8080", router)
+	if err != nil {
+		panic(err)
+	}
 }
