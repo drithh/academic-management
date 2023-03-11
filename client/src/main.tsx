@@ -9,8 +9,11 @@ import {
   ApolloProvider,
   gql,
 } from '@apollo/client';
+
+const url = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 const client = new ApolloClient({
-  uri: 'http://localhost:8080/query',
+  uri: `${url}/query`,
   cache: new InMemoryCache(),
 });
 
