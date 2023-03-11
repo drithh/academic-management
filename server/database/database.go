@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"os"
 
@@ -24,12 +25,18 @@ func (d DBLogger) AfterQuery(ctx context.Context, q *pg.QueryEvent) error {
 }
 
 
+
 func New () *pg.DB {
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: true,
+	}
+	
 	db := pg.Connect(&pg.Options{
 		Addr:     os.Getenv("POSTGRES_HOST") + ":" + os.Getenv("POSTGRES_PORT"),
 		User:     os.Getenv("POSTGRES_USER"),
 		Password: os.Getenv("POSTGRES_PASSWORD"),
 		Database: os.Getenv("POSTGRES_DB"),
+		TLSConfig: tlsConfig,
 	})
 	
 

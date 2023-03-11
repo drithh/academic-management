@@ -4,10 +4,15 @@
 
 This project is a simple academic management system to simulate multi tier architecture.
 
+## Demo
+
+Client UI: https://academic.drith.me/  
+API Playground: https://api.academic.drith.me/
+
 ## Technologies
 
 - React (Vite)
-- GraphQL (Apollo)
+- GraphQL (Apollo, gqlgen)
 - Golang (Chi)
 - PostgreSQL
 - Docker

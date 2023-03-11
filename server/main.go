@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -33,12 +35,17 @@ func main() {
 		Repository: &database.Repository{DB: DB},
 	}}))
 
+	port := os.Getenv("PORT") 
 
+	if port == "" {
+		port = "3000"
+	}
 
-	router.Handle("/", playground.Handler("Starwars", "/query"))
+	router.Handle("/", playground.Handler("Academic Management System", "/query"))
 	router.Handle("/query", srv)
+	fmt.Println("Server is running on port " + port)
 
-	err := http.ListenAndServe(":8080", router)
+	err := http.ListenAndServe(":"+port, router)
 	if err != nil {
 		panic(err)
 	}
