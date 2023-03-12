@@ -19,8 +19,6 @@ API Playground: https://api.academic.drith.me/
 
 ## Architecture
 
-<!-- image -->
-
 ![Architecture](architecture.png)
 
 ## Setup
