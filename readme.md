@@ -41,8 +41,8 @@ API Playground: https://api.academic.drith.me/
 
 ## Configuring Ports
 
-- The frontend is configured to run on port 3000, you can change this in `client/vite.config.ts`
-- The backend is configured to run on port 8080, you can change this in `server/main.go`
+- The frontend is configured to run on port 3000, you can change this in `env` file with name `VITE_FRONTEND_PORT`
+- The backend is configured to run on port 8080, you can change this in `env` file with name `PORT`
 
 ## Generating GraphQL Types
 

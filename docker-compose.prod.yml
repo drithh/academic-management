@@ -11,15 +11,20 @@ services:
       - 443:443
     volumes:
       - ./client:/app:delegated
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
     environment:
       - NODE_ENV=production
-  certbot:
-    image: certbot/certbot
-    env_file:
-      - .env
+  server:
+    build:
+      context: server
+      dockerfile: prod.Dockerfile
+    env_file: .env
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --email ${CERTBOT_EMAIL} -d ${CERTBOT_DOMAIN} --agree-tos
+      - backend_data:/app:delegated
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  backend_data:

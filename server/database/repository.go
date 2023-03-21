@@ -22,7 +22,7 @@ func (r *Repository) GetStudent(nim string) (*model.Student, error) {
 }
 
 func (r *Repository) CreateStudent(student *model.Student) error {
-	_, err := r.DB.Model(&student).Insert()
+	_, err := r.DB.Model(student).Insert()
 	return err
 
 }
