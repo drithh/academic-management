@@ -1,59 +1,38 @@
 package database
 
 import (
-	"context"
-	"crypto/tls"
+	"database/sql"
 	"fmt"
 	"os"
 
-	"github.com/go-pg/pg/v10"
+	_ "github.com/lib/pq"
 )
 
 type DBLogger struct{}
 
-func (d DBLogger) BeforeQuery(ctx context.Context, q *pg.QueryEvent) (context.Context, error) {
-	return ctx, nil
-}
+// func (d DBLogger) BeforeQuery(ctx context.Context, q *pg.QueryEvent) (context.Context, error) {
+// 	return ctx, nil
+// }
 
-func (d DBLogger) AfterQuery(ctx context.Context, q *pg.QueryEvent) error {
-	query, err := q.FormattedQuery()
+// func (d DBLogger) AfterQuery(ctx context.Context, q *pg.QueryEvent) error {
+// 	query, err := q.FormattedQuery()
+// 	if err != nil {
+// 		return err
+// 	}
+// 	fmt.Println(string(query))
+// 	return nil
+// }
+
+func New() (*sql.DB, error) {
+	db, err := sql.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		os.Getenv("POSTGRES_HOST"), os.Getenv("POSTGRES_PORT"), os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DB"), os.Getenv("SSL_MODE")))
 	if err != nil {
-		return err
+		return nil, err
 	}
-	fmt.Println(string(query))
-	return nil
+	return db, nil
 }
 
-func New() *pg.DB {
-
-	// Create a new TLS config with InsecureSkipVerify enabled
-	var tlsConfig *tls.Config
-
-	// Get the value of the SSL_MODE environment variable
-	sslMode := os.Getenv("SSL_MODE")
-	fmt.Println("sslMode: ", sslMode)
-	// Check if SSL_MODE is set to "false", then TLS should be disabled
-	if sslMode == "disable" {
-		tlsConfig = nil
-	} else {
-		// Enable TLS with InsecureSkipVerify
-		tlsConfig = &tls.Config{
-			InsecureSkipVerify: true,
-		}
-	}
-
-	// Connect to PostgreSQL with the TLS config
-	db := pg.Connect(&pg.Options{
-		Addr:      os.Getenv("POSTGRES_HOST") + ":" + os.Getenv("POSTGRES_PORT"),
-		User:      os.Getenv("POSTGRES_USER"),
-		Password:  os.Getenv("POSTGRES_PASSWORD"),
-		Database:  os.Getenv("POSTGRES_DB"),
-		TLSConfig: tlsConfig,
-	})
-
-	return db
-}
-
-func Close(db *pg.DB) {
+func Close(db *sql.DB) {
 	db.Close()
 }

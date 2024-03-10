@@ -1,15 +1,14 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
 	"strings"
-
-	"github.com/go-pg/pg/v10"
 )
 
-func Seed(db *pg.DB) {
+func Seed(db *sql.DB) {
 
 	// Read the SQL file
 	content, err := os.ReadFile("database/seeds.sql")

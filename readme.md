@@ -28,8 +28,8 @@ API Playground: https://api.academic.drith.me/
 1. Clone the repository
 2. copy `.env.example` to `.env` and fill in the environment variables
 3. Run `docker-compose up` in the root directory
-4. Run `make migrateup` to migrate the database
-5. Seed the database manually, for example, using `psql` or `pgAdmin`, the seed file is in `server/database/seed.sql`
+4. Run `make migrate-up` to migrate the database
+5. Run `make seed` to seed the database
 6. Open `http://localhost:8080` in your browser to access the graphql playground
 
 ### Frontend
@@ -41,8 +41,8 @@ API Playground: https://api.academic.drith.me/
 
 ## Configuring Ports
 
-- The frontend is configured to run on port 3000, you can change this in `env` file with name `VITE_FRONTEND_PORT`
-- The backend is configured to run on port 8080, you can change this in `env` file with name `PORT`
+- The frontend is configured to run on port 3000, you can change this in `client/vite.config.ts`
+- The backend is configured to run on port 8080, you can change this in `env` file with name `BACKEND_PORT`
 
 ## Generating GraphQL Types
 
@@ -54,7 +54,7 @@ API Playground: https://api.academic.drith.me/
 
 ## Generating Migrations
 
-1. Run `make createmigration migration_name` to create a new migration
+1. Run `make create-migration migration_name` to create a new migration
 2. The migration file will be in `server/database/migrations`
 3. Fill in the migration file with the desired changes
-4. Run `make migrateup` to apply the migration
+4. Run `make migrate-up` to apply the migration

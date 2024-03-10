@@ -14,11 +14,15 @@ import (
 )
 
 func main() {
-	DB := database.New()
+	DB, err := database.New()
+
+	if err != nil {
+		panic(err)
+	}
 
 	defer DB.Close()
 
-	DB.AddQueryHook(database.DBLogger{})
+	// DB.AddQueryHook(database.DBLogger{})
 
 	var args = os.Args
 
@@ -50,7 +54,7 @@ func main() {
 	router.Handle("/query", srv)
 	fmt.Println("Server is running on port " + port)
 
-	err := http.ListenAndServe(":"+port, router)
+	err = http.ListenAndServe(":"+port, router)
 	if err != nil {
 		panic(err)
 	}
