@@ -21,7 +21,7 @@ services:
     volumes:
       - backend_data:/app:delegated
     ports:
-      - ${PORT}:${PORT}
+      - ${BACKEND_PORT}:${BACKEND_PORT}
     depends_on:
       postgres:
         condition: service_healthy

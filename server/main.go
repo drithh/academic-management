@@ -20,7 +20,9 @@ func main() {
 
 	DB.AddQueryHook(database.DBLogger{})
 
-	if os.Args[1] == "seed" {
+	var args = os.Args
+
+	if len(args) > 1 && args[1] == "seed" {
 		database.Seed(DB)
 		return
 	}
@@ -38,7 +40,7 @@ func main() {
 		Repository: &database.Repository{DB: DB},
 	}}))
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("BACKEND_PORT")
 
 	if port == "" {
 		port = "3000"
