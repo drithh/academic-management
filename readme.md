@@ -6,8 +6,10 @@ This project is a simple academic management system to simulate multi tier archi
 
 ## Demo
 
+Since the project is deployed on Google Cloud Run, the first request may take a few seconds to respond due to cold start.
+
 Client UI: https://academic-management.vercel.app/  
-API Playground: https://api.academic.drith.me/
+API Playground: https://ams-server-gztuymsfwq-as.a.run.app
 
 ## Technologies
 
