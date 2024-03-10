@@ -6,7 +6,7 @@ This project is a simple academic management system to simulate multi tier archi
 
 ## Demo
 
-Client UI: https://academic.drith.me/  
+Client UI: https://academic-management.vercel.app/  
 API Playground: https://api.academic.drith.me/
 
 ## Technologies

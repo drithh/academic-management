@@ -1,16 +1,21 @@
 include .env
 
-createdb:
+EXEC=docker compose exec server
+
+create-db:
 	docker compose exec -it postgres createdb --username=postgres --owner=postgres ${POSTGRES_DB}
 
-dropdb:
+drop-db:
 	docker compose exec -it postgres dropdb ${POSTGRES_DB}
 
-createmigration:
-	migrate create -ext sql -dir server/database/migrations -seq $(filter-out $@,$(MAKECMDGOALS))
+create-migration:
+	${EXEC} migrate create -ext sql -dir server/database/migrations -seq $(filter-out $@,$(MAKECMDGOALS))
 
-migrateup:
-	migrate -path server/database/migrations -database "${DATABASE_URL}" -verbose up
+migrate-up:
+	${EXEC} migrate -path database/migrations -database "${DATABASE_URL}" -verbose up
 
-migratedown:
-	migrate -path server/database/migrations -database "${DATABASE_URL}" -verbose down
+migrate-down:
+	${EXEC} migrate -path server/database/migrations -database "${DATABASE_URL}" -verbose down
+
+seed:
+	${EXEC} go run main.go seed

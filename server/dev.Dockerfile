@@ -10,6 +10,8 @@ RUN go mod download
 RUN go get -u github.com/cosmtrek/air 
 RUN go install github.com/cosmtrek/air
 
+RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
 COPY . /app
 
 CMD air

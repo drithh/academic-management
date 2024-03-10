@@ -19,8 +19,11 @@ func main() {
 	defer DB.Close()
 
 	DB.AddQueryHook(database.DBLogger{})
-	
 
+	if os.Args[1] == "seed" {
+		database.Seed(DB)
+		return
+	}
 
 	router := chi.NewRouter()
 
@@ -35,7 +38,7 @@ func main() {
 		Repository: &database.Repository{DB: DB},
 	}}))
 
-	port := os.Getenv("PORT") 
+	port := os.Getenv("PORT")
 
 	if port == "" {
 		port = "3000"
